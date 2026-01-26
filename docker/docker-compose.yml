@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  beetbox:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:80"      # Frontend
+      - "8337:8337"    # API (optional direct access)
+    volumes:
+      - ${MUSIC_PATH:-./music}:/music:ro
+      - ${BEETS_DATA:-./data}:/data
+    environment:
+      - MUSIC_PATH=/music
+      - BEETS_DB_PATH=/data/library.db
+      - READONLY=${READONLY:-true}
+      - INCLUDE_PATHS=${INCLUDE_PATHS:-false}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8337/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: beetbox-config
+  namespace: beetbox
+data:
+  # Beets configuration file (optional)
+  config.yaml: |
+    directory: /music
+    library: /data/library.db
+
+    import:
+      move: no
+      copy: no
+      write: yes
+
+    plugins: []
+
+    paths:
+      default: $albumartist/$album%aunique{}/$track $title
+      singleton: Non-Album/$artist - $title
+      comp: Compilations/$album%aunique{}/$track $title

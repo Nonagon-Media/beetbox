@@ -1,0 +1,80 @@
+---
+# PersistentVolume for beets database
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: beetbox-data-pv
+  labels:
+    app: beetbox
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /opt/beetbox/data
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k3s-main
+---
+# PersistentVolumeClaim for beets database
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: beetbox-data
+  namespace: beetbox
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      app: beetbox
+---
+# PersistentVolume for music (NFS from nas)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: beetbox-music-pv
+  labels:
+    app: beetbox
+    type: music
+spec:
+  capacity:
+    storage: 500Gi
+  accessModes:
+    - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-music
+  nfs:
+    server: 192.0.2.164  # nas
+    path: /path/to/music  # Update this to your music path on nas
+    readOnly: true
+---
+# PersistentVolumeClaim for music
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: beetbox-music
+  namespace: beetbox
+spec:
+  accessModes:
+    - ReadOnlyMany
+  storageClassName: nfs-music
+  resources:
+    requests:
+      storage: 500Gi
+  selector:
+    matchLabels:
+      app: beetbox
+      type: music

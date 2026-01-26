@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: beetbox
+  namespace: beetbox
+  annotations:
+    # Traefik annotations (common for K3s)
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    # nginx annotations (if using nginx ingress)
+    # nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    # nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+spec:
+  rules:
+    - host: beetbox.local  # Update to your domain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: beetbox
+                port:
+                  number: 80
+  # Uncomment for TLS
+  # tls:
+  #   - hosts:
+  #       - beetbox.local
+  #     secretName: beetbox-tls

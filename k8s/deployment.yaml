@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beetbox
+  namespace: beetbox
+  labels:
+    app: beetbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: beetbox
+  template:
+    metadata:
+      labels:
+        app: beetbox
+    spec:
+      containers:
+        - name: beetbox
+          image: beetbox:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: api
+              containerPort: 8337
+              protocol: TCP
+          env:
+            - name: MUSIC_PATH
+              value: /music
+            - name: BEETS_DB_PATH
+              value: /data/library.db
+            - name: READONLY
+              value: "true"
+            - name: INCLUDE_PATHS
+              value: "false"
+            - name: CORS_ORIGIN
+              value: "*"
+          volumeMounts:
+            - name: music
+              mountPath: /music
+              readOnly: true
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: api
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: api
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+      volumes:
+        - name: music
+          persistentVolumeClaim:
+            claimName: beetbox-music
+        - name: data
+          persistentVolumeClaim:
+            claimName: beetbox-data

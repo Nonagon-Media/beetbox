@@ -1,0 +1,5 @@
+beets>=1.6.0
+flask>=3.0.0
+flask-cors>=4.0.0
+gunicorn>=21.0.0
+unidecode>=1.3.0

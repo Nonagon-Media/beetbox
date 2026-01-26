@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+
+# Build outputs
+frontend/dist/
+backend/*.egg-info/
+.eggs/
+build/
+dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Docker
+docker/data/
+
+# Kubernetes secrets
+k8s/*-secret.yaml
+
+# Beets
+*.db
+library.db
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
