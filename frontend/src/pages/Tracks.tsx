@@ -15,7 +15,6 @@ import {
 import { Search as SearchIcon } from '@mui/icons-material';
 import TrackList from '../components/TrackList';
 import { getAllItems } from '../api/beets';
-import type { Item } from '../types';
 
 type SortField = 'title' | 'artist' | 'album' | 'year' | 'added';
 
@@ -24,7 +23,7 @@ export default function Tracks() {
   const [sortField, setSortField] = useState<SortField>('artist');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
-  const { data: items = [], isLoading } = useQuery({
+  const { data: items = [] } = useQuery({
     queryKey: ['items'],
     queryFn: getAllItems,
   });

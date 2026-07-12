@@ -4,24 +4,22 @@ import { useQuery } from '@tanstack/react-query';
 import {
   Box,
   Typography,
-  List,
   ListItem,
   ListItemButton,
   ListItemText,
   TextField,
   InputAdornment,
   Avatar,
-  Chip,
 } from '@mui/material';
 import { Search as SearchIcon, Person as PersonIcon } from '@mui/icons-material';
 import { Virtuoso } from 'react-virtuoso';
-import { getAllArtists, queryAlbums } from '../api/beets';
+import { getAllArtists } from '../api/beets';
 
 export default function Artists() {
   const navigate = useNavigate();
   const [filter, setFilter] = useState('');
 
-  const { data: artists = [], isLoading } = useQuery({
+  const { data: artists = [] } = useQuery({
     queryKey: ['artists'],
     queryFn: getAllArtists,
   });
@@ -73,7 +71,7 @@ export default function Artists() {
       <Virtuoso
         style={{ height: 'calc(100vh - 64px)' }}
         data={filteredArtists}
-        itemContent={(index, artist) => (
+        itemContent={(_index, artist) => (
           <ListItem
             disablePadding
             sx={{

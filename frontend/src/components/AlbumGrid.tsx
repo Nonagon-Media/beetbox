@@ -36,7 +36,7 @@ export default function AlbumGrid({ albums, isLoading }: AlbumGridProps) {
   // Using virtuoso for large collections
   const itemsPerRow = 6; // Will be dynamic in real implementation
 
-  const rows = [];
+  const rows: Album[][] = [];
   for (let i = 0; i < albums.length; i += itemsPerRow) {
     rows.push(albums.slice(i, i + itemsPerRow));
   }

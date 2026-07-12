@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: beetbox
-          image: beetbox:latest
+          image: 123456789012.dkr.ecr.us-west-2.amazonaws.com/n9n/beetbox:latest
           imagePullPolicy: Always
           ports:
             - name: http
@@ -71,3 +71,5 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: beetbox-data
+      imagePullSecrets:
+        - name: ecr-creds

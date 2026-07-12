@@ -19,7 +19,7 @@ import {
 } from '@mui/icons-material';
 import AlbumGrid from '../components/AlbumGrid';
 import { getAllAlbums } from '../api/beets';
-import type { Album, ViewMode } from '../types';
+import type { ViewMode } from '../types';
 
 type SortField = 'album' | 'albumartist' | 'year' | 'added';
 

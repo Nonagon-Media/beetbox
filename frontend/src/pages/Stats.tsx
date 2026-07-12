@@ -8,7 +8,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Divider,
 } from '@mui/material';
 import {
   Album as AlbumIcon,

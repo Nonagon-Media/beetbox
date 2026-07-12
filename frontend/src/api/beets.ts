@@ -66,7 +66,7 @@ export async function deleteItem(id: number, deleteFile?: boolean): Promise<void
   });
 }
 
-export async function getItemFileUrl(id: number): string {
+export function getItemFileUrl(id: number): string {
   return `${API_BASE}/item/${id}/file`;
 }
 
