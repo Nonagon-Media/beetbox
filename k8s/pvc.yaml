@@ -1,5 +1,5 @@
 ---
-# PersistentVolume for beets database (local storage on k3s-main)
+# PersistentVolume for the beets database (node-local storage)
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -31,7 +31,7 @@ spec:
     requests:
       storage: 1Gi
 ---
-# PersistentVolume for music (NFS from nas - reuse existing)
+# PersistentVolume for the music library (NFS share - reuse an existing export)
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -46,7 +46,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: beetbox-nfs-music
   nfs:
-    server: nas
+    server: nas.example.internal
     path: /mnt/media/music
     readOnly: true
 ---

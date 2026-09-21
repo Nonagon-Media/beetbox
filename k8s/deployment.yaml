@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: beetbox
-          image: 123456789012.dkr.ecr.us-west-2.amazonaws.com/n9n/beetbox:latest
+          image: 123456789012.dkr.ecr.us-west-2.amazonaws.com/beetbox:latest  # replace with your registry
           imagePullPolicy: Always
           ports:
             - name: http
