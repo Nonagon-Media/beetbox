@@ -1,0 +1,20 @@
+direction: down
+
+user: Browser {shape: person}
+
+container: beetbox container {
+  nginx: "nginx :80" {
+    spa: "React build\n(/app/static)"
+    proxy: "/api/* proxy\n(strips /api prefix)"
+  }
+  api: "Flask API :8337\n(gunicorn, beets library)"
+  nginx.proxy -> api
+}
+
+music: "/music\n(read-only, local dir or NFS)" {shape: cylinder}
+db: "/data/library.db\n(beets SQLite)" {shape: cylinder}
+
+user -> container.nginx.spa: "pages, JS"
+user -> container.nginx.proxy: "JSON, audio, album art"
+container.api -> db: queries
+container.api -> music: "audio files, art"
