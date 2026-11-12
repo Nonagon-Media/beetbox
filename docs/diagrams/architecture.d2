@@ -1,20 +1,37 @@
-direction: down
+# Renders only in the N9N d2 pipeline: it imports lib/style.d2 and the icon sets from filer (/mnt/n9n/assets/icons/d2). The committed architecture.png is the rendered output.
+...@../../lib/style.d2
+...@/mnt/n9n/assets/icons/d2/simple.d2
+...@/mnt/n9n/assets/icons/d2/cncf.d2
+...@/mnt/n9n/assets/icons/d2/tabler.d2
+vars: {d2-config: {layout-engine: elk}}
+direction: right
+title: "beetbox — architecture" {class: title}
 
-user: Browser {shape: person}
+user: "Browser" {class: [svc; tabler-browser]}
 
-container: beetbox container {
-  nginx: "nginx :80" {
-    spa: "React build\n(/app/static)"
-    proxy: "/api/* proxy\n(strips /api prefix)"
+container: "beetbox container\n(start.sh runs nginx + gunicorn)" {
+  class: [zone; simple-docker]
+  nginx: "nginx :80\n(host 8080)" {
+    class: [subzone; simple-nginx]
+    spa: "React build\n/app/static" {class: [small; simple-react]}
+    proxy: "/api/* proxy\nstrips /api prefix" {class: [small; tabler-arrows-right-left]}
+    art: "/api/album/ → /album/\nart cached 1 day" {class: [small; tabler-photo]}
   }
-  api: "Flask API :8337\n(gunicorn, beets library)"
-  nginx.proxy -> api
+  api: "Flask API :8337\n(host 8337)\ngunicorn: 2 workers\n× 4 threads, timeout 300\nconfig READONLY=true\n(default)" {class: [svc; simple-flask]}
+  health: "healthcheck\nGET /health every 30s" {class: [small; tabler-heart-rate-monitor]}
+  nginx.proxy -> api {class: flow}
+  nginx.art -> api {class: flow}
+  health -> api {class: async}
 }
 
-music: "/music\n(read-only, local dir or NFS)" {shape: cylinder}
-db: "/data/library.db\n(beets SQLite)" {shape: cylinder}
+music: "/music (mounted :ro)\nlocal dir or NFS" {class: [svc; tabler-folder]}
+db: "/data/library.db (rw)\nbeets SQLite" {class: [svc; simple-sqlite]}
 
-user -> container.nginx.spa: "pages, JS"
-user -> container.nginx.proxy: "JSON, audio, album art"
-container.api -> db: queries
-container.api -> music: "audio files, art"
+k8s: "Optional: k8s/ manifests\n(deployment, configmap,\ningress)" {class: [small; cncf-kubernetes]}
+
+user -> container.nginx.spa: "pages, JS" {class: flow}
+user -> container.nginx.proxy: "JSON, audio" {class: flow}
+user -> container.nginx.art: "album art" {class: flow}
+container.api -> db: "queries" {class: flow}
+container.api -> music: "audio files, art" {class: flow}
+k8s -> container: "same image" {class: async}
